@@ -1,0 +1,27 @@
+# Render Blueprint: PRIVATE STAGING WITH SYNTHETIC DATA ONLY
+# A paid instance + persistent disk is necessary for SQLite persistence.
+services:
+  - type: web
+    name: dsr-pro-staging
+    runtime: docker
+    plan: starter
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /login
+    envVars:
+      - key: DSR_HOST
+        value: 0.0.0.0
+      - key: DSR_PORT
+        value: "8080"
+      - key: PORT
+        value: "8080"
+      - key: DSR_DB
+        value: /data/dsr.sqlite3
+      - key: DSR_HTTPS
+        value: "1"
+      - key: DSR_ADMIN_PASSWORD
+        sync: false
+    disk:
+      name: dsr-staging-data
+      mountPath: /data
+      sizeGB: 1
